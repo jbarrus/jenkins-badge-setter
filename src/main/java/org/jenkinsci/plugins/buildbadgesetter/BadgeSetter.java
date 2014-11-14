@@ -2,9 +2,6 @@ package org.jenkinsci.plugins.buildbadgesetter;
 
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.matrix.MatrixAggregatable;
-import hudson.matrix.MatrixAggregator;
-import hudson.matrix.MatrixBuild;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
@@ -16,7 +13,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.IOException;
 
-public class BadgeSetter extends BuildWrapper implements MatrixAggregatable {
+public class BadgeSetter extends BuildWrapper {
 
     public final String template;
 
@@ -34,7 +31,6 @@ public class BadgeSetter extends BuildWrapper implements MatrixAggregatable {
             @Override
             public boolean tearDown(AbstractBuild build, BuildListener listener)
                     throws IOException, InterruptedException {
-                setBadge(build, listener);
                 return true;
             }
         };
@@ -46,22 +42,6 @@ public class BadgeSetter extends BuildWrapper implements MatrixAggregatable {
         } catch (MacroEvaluationException e) {
             listener.getLogger().println(e.getMessage());
         }
-    }
-
-    public MatrixAggregator createAggregator(MatrixBuild build, Launcher launcher, BuildListener listener) {
-        return new MatrixAggregator(build, launcher, listener) {
-            @Override
-            public boolean startBuild() throws InterruptedException, IOException {
-                setBadge(build, listener);
-                return super.startBuild();
-            }
-
-            @Override
-            public boolean endBuild() throws InterruptedException, IOException {
-                setBadge(build, listener);
-                return super.endBuild();
-            }
-        };
     }
 
     @Extension

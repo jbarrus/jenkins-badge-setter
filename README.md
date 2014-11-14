@@ -1,5 +1,5 @@
 Jenkins plugin to set build badge text
-======================================
+--------------------------------------
 
 Sets badge text next to build jobs.  Similar to the build-name-setter and description-setter plugins but the text
 shows to the right of the build name (number) and date.
